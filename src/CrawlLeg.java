@@ -16,7 +16,6 @@ public class CrawlLeg {
 	    private List<String> links = new LinkedList<String>();
 	    private Document htmlDocument;
 
-
 	    /**
 	     * This performs all the work. It makes an HTTP request, checks the response, and then gathers
 	     * up all the links on the page. Perform a searchForWord after the successful crawl
@@ -35,18 +34,20 @@ public class CrawlLeg {
 	            if(connection.response().statusCode() == 200) // 200 is the HTTP OK status code
 	                                                          // indicating that everything is great.
 	            {
-	                System.out.println("\n**Visiting** Received web page at " + url);
+	                System.out.println("\nVisiting: " + url);
 	            }
 	            if(!connection.response().contentType().contains("text/html"))
 	            {
 	                System.out.println("**Failure** Retrieved something other than HTML");
 	                return false;
 	            }
+	            System.out.println("Retrieved HTML: \n");
 	            System.out.println(htmlDocument);
-	            Elements linksOnPage = htmlDocument.select("a[href]");
+	            Elements linksOnPage = htmlDocument.select("a[href]");	//Finds the all <a href = .. </a> links
 	            System.out.println("Found (" + linksOnPage.size() + ") links");
 	            for(Element link : linksOnPage)
 	            {
+	            	System.out.println(link);
 	                this.links.add(link.absUrl("href"));
 	            }
 	            return true;
@@ -58,29 +59,6 @@ public class CrawlLeg {
 	            return false;
 	        }
 	    }
-
-
-	    /**
-	     * Performs a search on the body of on the HTML document that is retrieved. This method should
-	     * only be called after a successful crawl.
-	     * 
-	     * @param searchWord
-	     *            - The word or string to look for
-	     * @return whether or not the word was found
-	     */
-	    public boolean searchForWord(String searchWord)
-	    {
-	        // Defensive coding. This method should only be used after a successful crawl.
-	        if(this.htmlDocument == null)
-	        {
-	            System.out.println("ERROR! Call crawl() before performing analysis on the document");
-	            return false;
-	        }
-	        System.out.println("Searching for the word " + searchWord + "...");
-	        String bodyText = this.htmlDocument.body().text();
-	        return bodyText.toLowerCase().contains(searchWord.toLowerCase());
-	    }
-
 
 	    public List<String> getLinks()
 	    {

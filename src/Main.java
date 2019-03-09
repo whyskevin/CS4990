@@ -6,6 +6,6 @@ public class Main {
 
 public static void main(String[] args) throws Exception {
 		Crawler crawler = new Crawler();
-		crawler.search("http://leetcode.com", "problem");
+		crawler.search("http://leetcode.com");
 	}
 }
