@@ -23,7 +23,7 @@ public class Crawler {
 	
 	public void search(String url) {
 		//Search for 10 pages MAX
-		while(this.pagesVisited.size() < 10) {
+		while(this.pagesVisited.size() < 2) {
 			String currentURL;
 			CrawlLeg leg = new CrawlLeg();
 			if(this.pagesToVisit.isEmpty()) {	//If there are no more URLs in the queue

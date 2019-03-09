@@ -1,3 +1,6 @@
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
 
@@ -15,6 +18,7 @@ public class CrawlLeg {
 	            "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/535.1 (KHTML, like Gecko) Chrome/13.0.782.112 Safari/535.1";
 	    private List<String> links = new LinkedList<String>();
 	    private Document htmlDocument;
+	    private static int docNumber = 0;
 
 	    /**
 	     * This performs all the work. It makes an HTTP request, checks the response, and then gathers
@@ -42,12 +46,26 @@ public class CrawlLeg {
 	                return false;
 	            }
 	            System.out.println("Retrieved HTML: \n");
-	            System.out.println(htmlDocument);
+//	            System.out.println(htmlDocument);
+	            BufferedWriter  writer = null;
+	            try
+	            {
+	                writer = new BufferedWriter( new FileWriter(new File("/Users/Kevin/eclipse-workspace/SearchEngine/src/repository", "doc"+docNumber+".txt")));
+	                writer.write(url+"\n");
+	                writer.write(htmlDocument.toString());
+	                docNumber++;
+	            }
+	            catch ( IOException e)
+	            {
+	            	System.out.println(e);
+	            }
+	            
+	            
 	            Elements linksOnPage = htmlDocument.select("a[href]");	//Finds the all <a href = .. </a> links
 	            System.out.println("Found (" + linksOnPage.size() + ") links");
 	            for(Element link : linksOnPage)
 	            {
-	            	System.out.println(link);
+//	            	System.out.println(link);
 	                this.links.add(link.absUrl("href"));
 	            }
 	            return true;
