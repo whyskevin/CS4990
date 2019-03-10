@@ -6,6 +6,6 @@ public class Main {
 
 public static void main(String[] args) throws Exception {
 		Crawler crawler = new Crawler();
-		crawler.search("http://www.google.com");
+		crawler.search("https://yahoo.com");
 	}
 }

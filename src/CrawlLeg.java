@@ -46,20 +46,20 @@ public class CrawlLeg {
 	                return false;
 	            }
 	            System.out.println("Retrieved HTML: \n");
-//	            System.out.println(htmlDocument);
+//	            System.out.println(htmlDocument.body().text());
 	            BufferedWriter  writer = null;
 	            try
 	            {
+	            	//Change this directory when running on your machine
 	                writer = new BufferedWriter( new FileWriter(new File("/Users/Kevin/eclipse-workspace/SearchEngine/src/repository", "doc"+docNumber+".txt")));
 	                writer.write(url+"\n");
-	                writer.write(htmlDocument.toString());
+//	                writer.write(htmlDocument.toString().replaceAll("<.*?>", "------------"));	Original REGEX approach. Would leave JavaScript and other misc. values
 	                docNumber++;
 	            }
 	            catch ( IOException e)
 	            {
 	            	System.out.println(e);
 	            }
-	            
 	            
 	            Elements linksOnPage = htmlDocument.select("a[href]");	//Finds the all <a href = .. </a> links
 	            System.out.println("Found (" + linksOnPage.size() + ") links");
@@ -76,6 +76,10 @@ public class CrawlLeg {
 	            // We were not successful in our HTTP request
 	            return false;
 	        }
+	    }
+	    
+	    public static String htmlToText(Document doc) {
+	    	return doc.body().text();
 	    }
 
 	    public List<String> getLinks()
