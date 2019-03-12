@@ -1,3 +1,4 @@
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
 
@@ -35,6 +36,27 @@ public class Crawler {
 			leg.crawl(currentURL);				//Crawls the "currentURL" which the URL at the front of the queue.
 			this.pagesToVisit.addAll(leg.getLinks());	//Links on the currentURL page are added to the queue.
 		}
+		
+        //Store URL and number of links to the CSV
+//        try {
+//        	for(int i = 0; i < CrawlLeg.urlAndLinks.size(); i++) {
+//        	StringBuilder s = new StringBuilder();
+//        	s.append(docNumber);
+//        	s.append(',');
+//        	s.append(url);
+//        	s.append(',');
+//        	s.append(linksOnPage.size());
+//        	s.append('\n');
+//        	FileWriter fw = new FileWriter(Indexer.CSV);
+//        	System.out.println(s.toString());
+//        	fw.write(s.toString());
+//        	}
+//        	fw.flush();
+//        	fw.close();
+//        }catch(IOException io){
+//        	System.out.println(io.getMessage());
+//        }
+		
 		System.out.println("Search done.");
 	}	
 }

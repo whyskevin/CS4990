@@ -18,7 +18,8 @@ public class CrawlLeg {
 	            "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/535.1 (KHTML, like Gecko) Chrome/13.0.782.112 Safari/535.1";
 	    private List<String> links = new LinkedList<String>();
 	    private Document htmlDocument;
-	    private static int docNumber = 0;
+	    private static int docNumber = 1;
+	    public static HashMap<String, Integer> urlAndLinks = new HashMap<String,Integer>();
 
 	    /**
 	     * This performs all the work. It makes an HTTP request, checks the response, and then gathers
@@ -46,28 +47,44 @@ public class CrawlLeg {
 	                return false;
 	            }
 	            System.out.println("Retrieved HTML: \n");
-//	            System.out.println(htmlDocument.body().text());
 	            BufferedWriter  writer = null;
+	            String fileName = "doc"+docNumber+".txt";
 	            try
 	            {
-	            	//Change this directory when running on your machine
-	                writer = new BufferedWriter( new FileWriter(new File("/Users/Kevin/eclipse-workspace/SearchEngine/src/repository", "doc"+docNumber+".txt")));
-	                writer.write(url+"\n");
-//	                writer.write(htmlDocument.toString().replaceAll("<.*?>", "------------"));	Original REGEX approach. Would leave JavaScript and other misc. values
-	                docNumber++;
+	            	//Write document main text to the /body_text directory
+	                writer = new BufferedWriter( new FileWriter(new File("/Users/Kevin/eclipse-workspace/SearchEngine/src/body_text", fileName)));
+//	                writer.write(url+"\n");
+//	                writer.write(htmlDocument.toString().replaceAll("<.*?>", "------------"));	//Original REGEX approach. Would leave JavaScript and other misc. values
+	                writer.write(htmlDocument.body().text());
 	            }
 	            catch ( IOException e)
 	            {
 	            	System.out.println(e);
 	            }
-	            
+                writer.flush();
+                writer.close();
+                
+                //Write raw HTML text to the /repository directory
+                try {
+//                	System.out.println("Write HTML");
+                	writer = new BufferedWriter( new FileWriter( new File("/Users/Kevin/eclipse-workspace/SearchEngine/src/repository", fileName)));
+                	writer.write(htmlDocument.outerHtml());
+                }catch (IOException e) {
+	            	System.out.println(e);
+                }
+                writer.flush();
+                writer.close();
+                
+                //Finished writing to files.
 	            Elements linksOnPage = htmlDocument.select("a[href]");	//Finds the all <a href = .. </a> links
-	            System.out.println("Found (" + linksOnPage.size() + ") links");
+//	            System.out.println("Found (" + linksOnPage.size() + ") links");
 	            for(Element link : linksOnPage)
 	            {
-//	            	System.out.println(link);
 	                this.links.add(link.absUrl("href"));
 	            }
+	            //Store URL and link count in HashMap
+	            urlAndLinks.put(url, linksOnPage.size());
+                docNumber++;
 	            return true;
 	        }
 	        catch(IOException ioe)
