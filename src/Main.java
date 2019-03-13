@@ -9,8 +9,7 @@ public static void main(String[] args) throws Exception {
 		Crawler crawler = new Crawler();
 		crawler.search("https://yahoo.com");
 		//Indexer -  processes the cleaned-up HTML documents to store in an inverted index list.
-		URI dir = new URI("/Users/Kevin/eclipse-workspace/SearchEngine/src/repository");
-		Indexer indexer = new Indexer(dir);
+		Indexer indexer = new Indexer();
 		indexer.read();
 	}
 }
