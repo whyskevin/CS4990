@@ -10,6 +10,7 @@ public class Indexer {
 	public static File CSV = new File("/Users/Kevin/eclipse-workspace/SearchEngine/src/report.csv");
 	static HashMap <String, HashMap<Integer,Integer>> indexList;	//Index -> (documentNumber, frequency)
 	URI directory;
+	public final File folder = new File ("/Users/Kevin/eclipse-workspace/SearchEngine/src/body_text");
 	
 	//Will read all files in the "/repository" directory and create Index objects for each term.
 	public Indexer(URI dir) {
@@ -18,7 +19,7 @@ public class Indexer {
 	}
 	
 	public boolean read() throws FileNotFoundException {
-		File folder = new File(directory);
+//		File folder = new File(directory);
 		File[] listOfFiles = folder.listFiles();	//Array of all files in the given directory
 		for(File x: listOfFiles) {
 			if(x.isFile()) {	
@@ -26,9 +27,12 @@ public class Indexer {
 				String term;
 				int indexOfDot = x.getName().indexOf('.');
 				int indexOfC = x.getName().indexOf('c');
-				int documentNum = Integer.valueOf(x.getName().substring(indexOfC, indexOfDot));	//Gets the document number by looking at index of '.'
+				String digit = x.getName().substring(indexOfC+1, indexOfDot);
+//				System.out.println(ddd);
+				int documentNum = Integer.valueOf(digit);	//Gets the document number by looking at index of '.'
 				while(in.hasNext()) {	//Checks if the file has the next token
 					term = in.next();
+//					System.out.println(term);
 					if(indexList.containsKey(term))		//If the indexList has the term
 					{
 						HashMap<Integer, Integer> list = indexList.get(term);	//Gets the list of (document,term) pairs
@@ -45,7 +49,7 @@ public class Indexer {
 				System.out.println("Directory contains bad file");
 				return false;
 			}
-		}
+		}		
 		return true;
 	}
 	

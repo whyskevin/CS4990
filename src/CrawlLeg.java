@@ -19,7 +19,7 @@ public class CrawlLeg {
 	    private List<String> links = new LinkedList<String>();
 	    private Document htmlDocument;
 	    private static int docNumber = 1;
-	    public static HashMap<String, Integer> urlAndLinks = new HashMap<String,Integer>();
+	    public static LinkedHashMap<String, Integer> urlAndLinks = new LinkedHashMap<String,Integer>();
 
 	    /**
 	     * This performs all the work. It makes an HTTP request, checks the response, and then gathers
@@ -55,7 +55,7 @@ public class CrawlLeg {
 	                writer = new BufferedWriter( new FileWriter(new File("/Users/Kevin/eclipse-workspace/SearchEngine/src/body_text", fileName)));
 //	                writer.write(url+"\n");
 //	                writer.write(htmlDocument.toString().replaceAll("<.*?>", "------------"));	//Original REGEX approach. Would leave JavaScript and other misc. values
-	                writer.write(htmlDocument.body().text());
+	                writer.write(htmlDocument.body().text().replaceAll("[^A-Za-z0-9]", " ")); //Replaces all NON alpha-numeric characters
 	            }
 	            catch ( IOException e)
 	            {

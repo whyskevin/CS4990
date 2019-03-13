@@ -24,7 +24,7 @@ public class Crawler {
 	
 	public void search(String url) {
 		//Search for 10 pages MAX
-		while(this.pagesVisited.size() < 2) {
+		while(this.pagesVisited.size() < 5) {
 			String currentURL;
 			CrawlLeg leg = new CrawlLeg();
 			if(this.pagesToVisit.isEmpty()) {	//If there are no more URLs in the queue
@@ -38,24 +38,27 @@ public class Crawler {
 		}
 		
         //Store URL and number of links to the CSV
-//        try {
-//        	for(int i = 0; i < CrawlLeg.urlAndLinks.size(); i++) {
-//        	StringBuilder s = new StringBuilder();
-//        	s.append(docNumber);
-//        	s.append(',');
-//        	s.append(url);
-//        	s.append(',');
-//        	s.append(linksOnPage.size());
-//        	s.append('\n');
-//        	FileWriter fw = new FileWriter(Indexer.CSV);
-//        	System.out.println(s.toString());
-//        	fw.write(s.toString());
-//        	}
-//        	fw.flush();
-//        	fw.close();
-//        }catch(IOException io){
-//        	System.out.println(io.getMessage());
-//        }
+		//Could put this in CrawlLeg too
+        try {
+        	Set<String> keys = CrawlLeg.urlAndLinks.keySet();
+        	String [] arrayOfKeys = keys.toArray(new String[keys.size()]);
+	        	for(int i = 0; i < arrayOfKeys.length; i++) {
+	        	StringBuilder s = new StringBuilder();
+	        	s.append(i);
+	        	s.append(',');
+	        	s.append(arrayOfKeys[i]);
+	        	s.append(',');
+	        	s.append(CrawlLeg.urlAndLinks.get(arrayOfKeys[i]));
+	        	s.append('\n');
+	        	FileWriter fw = new FileWriter(Indexer.CSV, true);
+	        	System.out.println(s.toString());
+	        	fw.write(s.toString());
+	        	fw.flush();
+	        	fw.close();
+	        	}
+        }catch(IOException io){
+        	System.out.println(io.getMessage());
+        }
 		
 		System.out.println("Search done.");
 	}	
