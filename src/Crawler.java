@@ -23,8 +23,8 @@ public class Crawler {
 	}
 	
 	public void search(String url) {
-		//Search for 10 pages MAX
-		while(this.pagesVisited.size() < 5) {
+		//Search for 1000 pages MAX
+		while(this.pagesVisited.size() < 100) {
 			String currentURL;
 			CrawlLeg leg = new CrawlLeg();
 			if(this.pagesToVisit.isEmpty()) {	//If there are no more URLs in the queue
@@ -51,7 +51,7 @@ public class Crawler {
 	        	s.append(CrawlLeg.urlAndLinks.get(arrayOfKeys[i]));
 	        	s.append('\n');
 	        	FileWriter fw = new FileWriter(Indexer.CSV, true);
-	        	System.out.println(s.toString());
+//	        	System.out.println(s.toString());
 	        	fw.write(s.toString());
 	        	fw.flush();
 	        	fw.close();

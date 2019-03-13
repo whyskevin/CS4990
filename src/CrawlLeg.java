@@ -1,7 +1,5 @@
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
+import java.net.*;
 import java.util.*;
 
 import org.jsoup.Connection;
@@ -31,13 +29,14 @@ public class CrawlLeg {
 	     */
 	    public boolean crawl(String url)
 	    {
+	    	isValidURL(url);
 	        try
 	        {
 	            Connection connection = Jsoup.connect(url).userAgent(USER_AGENT);
 	            Document htmlDocument = connection.get();
 	            this.htmlDocument = htmlDocument;
 	            if(connection.response().statusCode() == 200) // 200 is the HTTP OK status code
-	                                                          // indicating that everything is great.
+	            												// indicating that everything is great.
 	            {
 	                System.out.println("\nVisiting: " + url);
 	            }
@@ -46,7 +45,7 @@ public class CrawlLeg {
 	                System.out.println("**Failure** Retrieved something other than HTML");
 	                return false;
 	            }
-	            System.out.println("Retrieved HTML: \n");
+//	            System.out.println("Retrieved HTML: \n");
 	            BufferedWriter  writer = null;
 	            String fileName = "doc"+docNumber+".txt";
 	            try
@@ -60,6 +59,7 @@ public class CrawlLeg {
 	            catch ( IOException e)
 	            {
 	            	System.out.println(e);
+	            	
 	            }
                 writer.flush();
                 writer.close();
@@ -80,7 +80,9 @@ public class CrawlLeg {
 //	            System.out.println("Found (" + linksOnPage.size() + ") links");
 	            for(Element link : linksOnPage)
 	            {
-	                this.links.add(link.absUrl("href"));
+	            	if(isValidURL(link.absUrl("href"))) {
+	            		this.links.add(link.absUrl("href"));
+	            	}
 	            }
 	            //Store URL and link count in HashMap
 	            urlAndLinks.put(url, linksOnPage.size());
@@ -102,5 +104,16 @@ public class CrawlLeg {
 	    public List<String> getLinks()
 	    {
 	        return this.links;
+	    }
+	    
+	    public boolean isValidURL(String urlStr) {
+	        try {
+	          URL url = new URL(urlStr);
+	          return true;
+	        }
+	        catch (MalformedURLException e) {
+//	        	System.out.println(urlStr + " is not a valid URL");
+	            return false;
+	        }
 	    }
 }
